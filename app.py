@@ -4,13 +4,13 @@ import numpy as np
 import pickle
 import matplotlib.pyplot as plt
 
-# 加载模型
+# Load model
 with open('ann_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
 st.title("Binary ANN Model Prediction Demo")
 
-# 默认值
+# Default values
 default_values = {
     'age': 41,
     'sex': 1,
@@ -28,7 +28,7 @@ age = st.number_input('Age', value=default_values['age'])
 sex = st.selectbox('Sex', [0, 1], index=default_values['sex'])  # 0-Female 1-Male
 pc_prs = st.number_input('PC Polygenic Risk Score', value=default_values['pc_prs'])
 t2dm_prs = st.number_input('T2DM PRS', value=default_values['t2dm_prs'])
-smoking_status = st.selectbox('Smoking Status', [0, 1, 2], index=default_values['smoking_status']) # 0-Never, 1-Quit, 2-Smoking
+smoking_status = st.selectbox('Smoking Status', [0, 1, 2], index=default_values['smoking_status'])
 bmi = st.number_input('BMI', value=default_values['bmi'])
 alp = st.number_input('Alkaline Phosphatase', value=default_values['alp'])
 alt = st.number_input('ALT', value=default_values['alt'])
@@ -47,8 +47,7 @@ input_df = pd.DataFrame([{
 }])
 
 if st.button('Predict'):
-    # 预测概率
-    # 判断是否为pipeline模型（含scaler），适配不同保存方式
+    # Predict probability
     if hasattr(model, 'named_steps'):
         scaler = model.named_steps.get('scaler')
         clf = model.named_steps.get('ann')
@@ -59,14 +58,16 @@ if st.button('Predict'):
 
     st.markdown(f"### Probability of Class 1: **{pred_prob:.3%}**")
 
-    # 概率柱状图
+    # Vertical bar plot
     st.markdown("#### Probability Visualization:")
-    fig, ax = plt.subplots(figsize=(6, 1.2))
-    ax.barh(['Probability'], [pred_prob], color='#4f8dfd')
-    ax.set_xlim(0, 1)
-    ax.set_xlabel("Probability")
-    ax.text(pred_prob, 0, f"{pred_prob:.3%}", va='center', ha='left', fontsize=13, color='black')
-    ax.set_yticks([])
+    fig, ax = plt.subplots(figsize=(1.5, 5))
+    ax.bar([0], [pred_prob], width=0.5, color='#4f8dfd')
+    ax.set_ylim(0, 1)
+    ax.set_xlim(-0.5, 0.5)
+    ax.set_ylabel("Probability")
+    ax.set_xticks([])
     ax.set_title("Predicted Probability of Class 1")
+    # Show value on bar
+    ax.text(0, pred_prob + 0.05, f"{pred_prob:.3%}", ha='center', va='bottom', fontsize=13, color='black')
     plt.tight_layout()
     st.pyplot(fig)
