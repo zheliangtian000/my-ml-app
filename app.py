@@ -17,7 +17,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Layout: Title on top, two columns below
-st.markdown('<div class="big-title">Binary ANN Model Prediction Demo</div>', unsafe_allow_html=True)
+st.markdown('<div class="big-title">ANN Model Prediction</div>', unsafe_allow_html=True)
 st.markdown("---")
 
 col1, col2 = st.columns([1.2, 1.5], gap="large")
@@ -84,7 +84,7 @@ with col2:
         if pred_prob is not None:
             st.markdown(
                 f'<div style="font-size:1.15em; color:#ed4c2c; font-weight:bold; margin-bottom:12px">'
-                f'Probability of Class 1: {pred_prob:.3%}'
+                f'Predicted Probability of outcome: {pred_prob:.3%}'
                 '</div>',
                 unsafe_allow_html=True
             )
@@ -97,7 +97,7 @@ with col2:
             ax.set_ylabel("Probability", fontsize=14)
             ax.set_xticks([0])
             ax.set_xticklabels(["Patient"], fontsize=14)
-            ax.set_title("Predicted Probability of outcome", fontsize=15, pad=16)
+            #ax.set_title("Predicted Probability of outcome", fontsize=15, pad=16)
             ax.text(0, pred_prob + 0.015, f"{pred_prob:.3%}", ha='center', va='bottom', fontsize=16, color='black')
             ax.spines['top'].set_visible(False)
             ax.spines['right'].set_visible(False)
