@@ -93,4 +93,19 @@ with col2:
         ax.set_xticks([0])
         ax.set_xticklabels(["Patient"], fontsize=14)
         ax.set_title("Predicted Probability of outcome", fontsize=15, pad=16)
-        ax.text(0
+        ax.text(0, pred_prob + 0.015, f"{pred_prob:.3%}", ha='center', va='bottom', fontsize=16, color='black')
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['bottom'].set_visible(True)
+        ax.spines['left'].set_visible(True)
+        ax.grid(axis='y', linestyle='--', linewidth=0.3, alpha=0.5)
+        plt.tight_layout()
+        st.pyplot(fig)
+
+# Footer style if you want
+st.markdown("---")
+st.markdown(
+    "<div style='text-align:right; color:gray; font-size: 0.9em;'>"
+    "© 2025 Binary ANN Model Demo"
+    "</div>", unsafe_allow_html=True
+)
