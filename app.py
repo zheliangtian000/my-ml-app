@@ -90,7 +90,7 @@ with col2:
             )
 
             # Plot - vertical bar
-            fig, ax = plt.subplots(figsize=(2, 5))
+            fig, ax = plt.subplots(figsize=(2, 4))
             ax.bar([0], [pred_prob], width=0.5, color='tomato')
             ax.set_ylim(0, 1)
             ax.set_xlim(-0.8, 0.8)
@@ -98,7 +98,7 @@ with col2:
             ax.set_xticks([0])
             ax.set_xticklabels(["Patient"], fontsize=14)
             #ax.set_title("Predicted Probability of outcome", fontsize=15, pad=16)
-            ax.text(0, pred_prob + 0.015, f"{pred_prob:.3%}", ha='center', va='bottom', fontsize=16, color='black')
+            ax.text(0, pred_prob + 0.015, f"{pred_prob:.3%}", ha='center', va='bottom', fontsize=14, color='tomato')
             ax.spines['top'].set_visible(False)
             ax.spines['right'].set_visible(False)
             ax.spines['bottom'].set_visible(True)
@@ -111,6 +111,6 @@ with col2:
 st.markdown("---")
 st.markdown(
     "<div style='text-align:right; color:gray; font-size: 0.9em;'>"
-    "© 2025 Binary ANN Model Demo"
+    "© 2025 Binary ANN Model"
     "</div>", unsafe_allow_html=True
 )
