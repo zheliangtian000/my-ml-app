@@ -38,7 +38,7 @@ input_df = pd.DataFrame([{
 if st.button('预测'):
     # 预测概率
     pred_prob = model.predict_proba(input_df)[0, 1]
-    st.markdown(f"### 预测为1的概率为: **{pred_prob:.2%}**")
+    st.markdown(f"### 预测为1的概率为: **{pred_prob:.3%}**")
     
     # SHAP解释（使用TreeExplainer或KernelExplainer）
     st.markdown("### 单样本SHAP力图解释")
