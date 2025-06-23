@@ -12,20 +12,20 @@ st.title("Binary ANN Model Prediction Demo")
 
 # Default values
 default_values = {
-    'age': 41,
+    'age': 77,
     'sex': 1,
-    'pc_prs': 3.69928,
-    't2dm_prs': 20.9937,
+    'pc_prs': 5.457,
+    't2dm_prs': 18.9721,
     'smoking_status': 1,
-    'bmi': 23.7508,
-    'alp': 65.2,
-    'alt': 26.62,
-    'hba1c': 89.8
+    'bmi': 27.2163,
+    'alp': 67.2,
+    'alt': 32.71,
+    'hba1c': 36.5
 }
 
 st.header("Please Fill Features:")
 age = st.number_input('Age', value=default_values['age'])
-sex = st.selectbox('Sex', [0, 1], index=default_values['sex'])  # 0-Female 1-Male
+sex = st.selectbox('Sex', [0, 1], index=default_values['sex'])
 pc_prs = st.number_input('PC Polygenic Risk Score', value=default_values['pc_prs'])
 t2dm_prs = st.number_input('T2DM PRS', value=default_values['t2dm_prs'])
 smoking_status = st.selectbox('Smoking Status', [0, 1, 2], index=default_values['smoking_status'])
@@ -59,15 +59,21 @@ if st.button('Predict'):
     st.markdown(f"### Probability of Class 1: **{pred_prob:.3%}**")
 
     # Vertical bar plot
-    st.markdown("#### Probability Visualization:")
     fig, ax = plt.subplots(figsize=(1.5, 5))
-    ax.bar([0], [pred_prob], width=0.5, color='#4f8dfd')
-    ax.set_ylim(0, 1)
+    ax.bar([0], [pred_prob], width=0.5, color='tomato')
+    ax.set_ylim(0, 0.5)
     ax.set_xlim(-0.5, 0.5)
     ax.set_ylabel("Probability")
-    ax.set_xticks([])
-    ax.set_title("Predicted Probability of Class 1")
+    ax.set_xticks([0])
+    ax.set_xticklabels(["Patient"])
+    ax.set_title("Predicted Probability of outcome")
     # Show value on bar
-    ax.text(0, pred_prob + 0.05, f"{pred_prob:.3%}", ha='center', va='bottom', fontsize=13, color='black')
+    ax.text(0, pred_prob + 0.01, f"{pred_prob:.3%}", ha='center', va='bottom', fontsize=13, color='black')
+    # Remove top/right/bottom spines
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(True)
+    ax.spines['left'].set_visible(True)
+    ax.grid(False)
     plt.tight_layout()
     st.pyplot(fig)
