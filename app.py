@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import pickle
 import matplotlib.pyplot as plt
 
@@ -8,12 +7,21 @@ import matplotlib.pyplot as plt
 with open('ann_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
-st.title("Binary ANN Model Prediction Demo")
+# --- Style improvements ---
+st.markdown("""
+    <style>
+    .big-title {font-size: 2.4em !important; font-weight: bold; line-height: 1.1;}
+    .section-header {font-size: 1.35em !important; font-weight: bold; margin-bottom: 0.5em;}
+    .stButton>button {width: 100%; border: 1px solid tomato;}
+    </style>
+""", unsafe_allow_html=True)
 
-# Use two columns: left for input, right for output
-col1, col2 = st.columns([1, 2])
+# Layout: Title on top, two columns below
+st.markdown('<div class="big-title">Binary ANN Model Prediction Demo</div>', unsafe_allow_html=True)
+st.markdown("---")
 
-# Default values
+col1, col2 = st.columns([1.2, 1.5], gap="large")
+
 default_values = {
     'age': 77,
     'sex': 1,
@@ -27,7 +35,7 @@ default_values = {
 }
 
 with col1:
-    st.header("Please Fill Features:")
+    st.markdown('<div class="section-header">Please Fill Features:</div>', unsafe_allow_html=True)
     age = st.number_input('Age', value=default_values['age'])
     sex = st.selectbox('Sex', [0, 1], index=default_values['sex'])
     pc_prs = st.number_input('PC Polygenic Risk Score', value=default_values['pc_prs'])
@@ -56,12 +64,11 @@ with col2:
     if 'predict_clicked' not in st.session_state:
         st.session_state.predict_clicked = False
 
-    # Only run prediction if button clicked
     if predict_clicked:
         st.session_state.predict_clicked = True
 
     if st.session_state.predict_clicked:
-        # Predict probability
+        # Probability prediction
         if hasattr(model, 'named_steps'):
             scaler = model.named_steps.get('scaler')
             clf = model.named_steps.get('ann')
@@ -70,21 +77,20 @@ with col2:
         else:
             pred_prob = model.predict_proba(input_df)[0, 1]
 
-        st.markdown(f"### Probability of Class 1: **{pred_prob:.3%}**")
+        st.markdown(
+            f'<div style="font-size:1.15em; color:#ed4c2c; font-weight:bold; margin-bottom:12px">'
+            f'Probability of Class 1: {pred_prob:.3%}'
+            '</div>',
+            unsafe_allow_html=True
+        )
 
-        fig, ax = plt.subplots(figsize=(1.5, 5))
+        # Plot - vertical bar
+        fig, ax = plt.subplots(figsize=(2, 5))
         ax.bar([0], [pred_prob], width=0.5, color='tomato')
         ax.set_ylim(0, 0.5)
-        ax.set_xlim(-0.5, 0.5)
-        ax.set_ylabel("Probability")
+        ax.set_xlim(-0.8, 0.8)
+        ax.set_ylabel("Probability", fontsize=14)
         ax.set_xticks([0])
-        ax.set_xticklabels(["Patient"])
-        ax.set_title("Predicted Probability of outcome")
-        ax.text(0, pred_prob + 0.01, f"{pred_prob:.3%}", ha='center', va='bottom', fontsize=13, color='black')
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['bottom'].set_visible(True)
-        ax.spines['left'].set_visible(True)
-        ax.grid(False)
-        plt.tight_layout()
-        st.pyplot(fig)
+        ax.set_xticklabels(["Patient"], fontsize=14)
+        ax.set_title("Predicted Probability of outcome", fontsize=15, pad=16)
+        ax.text(0
