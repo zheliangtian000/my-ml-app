@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import joblib
 import pickle
 import os
 
@@ -64,13 +63,8 @@ input_df = pd.DataFrame([{
 # ----- 加载模型 -----
 @st.cache_resource
 def load_model():
-    # 支持pkl或joblib格式（优先joblib）
-    model_path = 'ann_model.joblib' if os.path.exists('ann_model.joblib') else 'ann_model.pkl'
-    if model_path.endswith('.joblib'):
-        model = joblib.load(model_path)
-    else:
-        with open(model_path, 'rb') as f:
-            model = pickle.load(f)
+    with open('ann_model.pkl', 'rb') as f:
+        model = pickle.load(f)
     return model
 
 model = load_model()
@@ -98,7 +92,7 @@ if predict_clicked:
         # 标签显示
         st.info(f"Predicted Label: **{int(pred_label)}** (0=Negative, 1=Positive)")
 
-# 展示输入数据（可选，方便调试/演示）
+# 展示输入数据（可选）
 with st.expander("Show Input Data"):
     st.write(input_df)
 
