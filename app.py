@@ -87,14 +87,8 @@ if predict_clicked:
             unsafe_allow_html=True
         )
         # 横向进度条
-        st.progress(pred_prob, text=f"{pred_prob:.2%}")
+        st.progress(pred_prob, text=f"{pred_prob:.3%}")
 
         # 标签显示
         st.info(f"Predicted Label: **{int(pred_label)}** (0=Negative, 1=Positive)")
 
-# 展示输入数据（可选）
-with st.expander("Show Input Data"):
-    st.write(input_df)
-
-# ----- 右下角小标 -----
-st.markdown('<div class="footer2025">2025 Binary ANN Model</div>', unsafe_allow_html=True)
