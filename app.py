@@ -1,9 +1,6 @@
 import streamlit as st
 import pandas as pd
 import joblib
-import shap
-import matplotlib.pyplot as plt
-import numpy as np
 import os
 
 # ----- 页面设置 -----
@@ -89,40 +86,9 @@ if predict_clicked:
             '</div>',
             unsafe_allow_html=True
         )
+        # 横向进度条
         st.progress(pred_prob, text=f"{pred_prob:.3%}")
 
+        # 标签显示
         st.info(f"Predicted Label: **{pred_label}** (0=Negative, 1=Positive, threshold=0.33)")
 
-        # ----- SHAP 力图 -----
-        try:
-            st.markdown('<div class="section-header">Model Interpretation (SHAP Force Plot):</div>', unsafe_allow_html=True)
-
-            # 自动判断pipeline/scaler
-            if hasattr(model, 'named_steps') and 'mlpclassifier' in model.named_steps:
-                clf = model.named_steps['mlpclassifier']
-                # scaler = model.named_steps['standardscaler'] # 不用手动
-                explainer = shap.KernelExplainer(clf.predict_proba, shap.kmeans(input_df, 1))
-                X_trans = model.named_steps['standardscaler'].transform(input_df)
-            elif hasattr(model, 'predict_proba'):
-                clf = model
-                explainer = shap.KernelExplainer(clf.predict_proba, shap.kmeans(input_df, 1))
-                X_trans = input_df
-            else:
-                raise Exception("Model type not supported for SHAP.")
-
-            shap_values = explainer.shap_values(X_trans)
-            # 单样本force_plot
-            fig = shap.force_plot(
-                explainer.expected_value[1], shap_values[1][0], X_trans[0],
-                matplotlib=True, show=False, feature_names=input_df.columns
-            )
-            st.pyplot(fig, clear_figure=True)
-        except Exception as e:
-            st.warning(f"SHAP force plot failed: {e}")
-
-# 可选：显示输入数据
-with st.expander("Show Input Data"):
-    st.write(input_df)
-
-# ----- 右下角小标 -----
-st.markdown('<div class="footer2025">2025 Binary ANN Model</div>', unsafe_allow_html=True)
