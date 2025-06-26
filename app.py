@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import pickle
+import joblib
 import os
 
 # ----- 页面设置 -----
@@ -63,8 +63,7 @@ input_df = pd.DataFrame([{
 # ----- 加载模型 -----
 @st.cache_resource
 def load_model():
-    with open('ann_model.pkl', 'rb') as f:
-        model = pickle.load(f)
+    model = joblib.load('ann_model.joblib')
     return model
 
 model = load_model()
