@@ -73,7 +73,8 @@ predict_clicked = st.button('Predict')
 if predict_clicked:
     try:
         pred_prob = model.predict_proba(input_df)[0, 1]
-        pred_label = model.predict(input_df)[0]
+        threshold = 0.33
+        pred_label = int(pred_prob >= threshold)
     except Exception as e:
         st.error(f"Model prediction failed: {e}")
         pred_prob = None
@@ -89,5 +90,5 @@ if predict_clicked:
         st.progress(pred_prob, text=f"{pred_prob:.3%}")
 
         # 标签显示
-        st.info(f"Predicted Label: **{int(pred_label)}** (0=Negative, 1=Positive)")
+        st.info(f"Predicted Label: **{pred_label}** (0=Negative, 1=Positive, threshold=0.33)")
 
